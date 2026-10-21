@@ -9,7 +9,7 @@ function monkeyStyle(settings) {
   const accent = dark ? '#714000' : '#ffd580';
   const bg = dark ? '255, 255, 255' : '12, 17, 26';
   const palette = settings.ink === 'theme' ? '' : `
-    html[data-glasstape-test] #app {
+    html[data-glasstype-test] #app {
       --text-color: ${foreground} !important;
       --sub-color: ${muted} !important;
       --main-color: ${accent} !important;
@@ -23,21 +23,21 @@ function monkeyStyle(settings) {
     :root { --gt-backdrop: rgba(${bg}, ${settings.backdrop}); }
     ${palette}
     ${settings.compact ? `
-      html[data-glasstape-test] header,
-      html[data-glasstape-test] #header,
-      html[data-glasstape-test] footer,
-      html[data-glasstape-test] #footer,
+      html[data-glasstype-test] header,
+      html[data-glasstype-test] #header,
+      html[data-glasstype-test] footer,
+      html[data-glasstype-test] #footer,
       .pageTest #testConfig,
       .pageTest [data-ui-element="testConfig"],
       .pageTest [data-ui-element="testConfig"] + button,
-      html[data-glasstape-test] body > div.fixed.z-1000,
-      html[data-glasstape-test] #commandLineMobileButton { display: none !important; }
-      html[data-glasstape-test] #app {
+      html[data-glasstype-test] body > div.fixed.z-1000,
+      html[data-glasstype-test] #commandLineMobileButton { display: none !important; }
+      html[data-glasstype-test] #app {
         padding: 16px 0 !important;
         gap: 0 !important;
         grid-template-rows: minmax(0, 1fr) !important;
       }
-      html[data-glasstape-test] #app > main { grid-row: 1 !important; }
+      html[data-glasstype-test] #app > main { grid-row: 1 !important; }
       .pageTest { margin-top: 0 !important; }
     ` : ''}
   `;

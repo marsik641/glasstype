@@ -11,7 +11,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function waitState(shell, predicate, timeout = 35000) {
   const until = Date.now() + timeout;
   while (Date.now() < until) {
-    const value = await shell.evaluate(() => window.glassTape.ready());
+    const value = await shell.evaluate(() => window.glassType.ready());
     if (predicate(value)) return value;
     await delay(300);
   }
@@ -32,7 +32,7 @@ async function main() {
   const artifacts = path.join(root, 'artifacts');
   await fs.mkdir(artifacts, { recursive: true });
   const profile = path.join(root, '.test-profile', `desktop-${Date.now()}`);
-  const env = { ...process.env, GLASSTAPE_TEST_PROFILE: profile };
+  const env = { ...process.env, GLASSTYPE_TEST_PROFILE: profile };
   for (const key of Object.keys(env)) {
     if (/^(ELECTRON_RUN_AS_NODE|NODE_OPTIONS)$/i.test(key)) delete env[key];
   }
@@ -54,7 +54,7 @@ async function main() {
     }
     assert.ok(shell);
     await shell.waitForSelector('#welcome:not([hidden])');
-    const initial = await shell.evaluate(() => window.glassTape.ready());
+    const initial = await shell.evaluate(() => window.glassType.ready());
     console.log('Launch:', JSON.stringify({ pageState: initial.pageState, shortcuts: initial.shortcuts }));
     const native = await electron.evaluate(({ BrowserWindow }) => {
       const w = BrowserWindow.getAllWindows()[0];
@@ -67,7 +67,7 @@ async function main() {
 
     // Try the real service first. No credentials are read or entered.
     if (!process.argv.includes('--fixture-only')) await waitState(shell, s => s.pageState !== 'loading');
-    const live = await shell.evaluate(() => window.glassTape.ready());
+    const live = await shell.evaluate(() => window.glassType.ready());
     console.log('Live site:', JSON.stringify({ pageState: live.pageState, error: live.lastError }));
     if (live.pageState === 'ready') {
       const remote = electron.context().pages().find(p => p.url().startsWith('https://monkeytype.com'));
@@ -78,15 +78,15 @@ async function main() {
     // Isolate UI checks from the service's network availability.
     let simulateOffline = false;
     await electron.context().route('https://monkeytype.com/**', route => simulateOffline ? route.abort() : route.fulfill({ status: 200, contentType: 'text/html', body: fixture }));
-    await shell.evaluate(() => window.glassTape.action('reload'));
+    await shell.evaluate(() => window.glassType.action('reload'));
     await waitState(shell, s => s.pageState === 'ready');
     await shell.getByRole('button', { name: 'Начать печатать' }).click();
     await shell.locator('.toolbar').waitFor({ state: 'hidden' });
-    await shell.evaluate(() => window.glassTape.action('toolbar'));
+    await shell.evaluate(() => window.glassType.action('toolbar'));
     await shell.locator('.toolbar').waitFor({ state: 'visible' });
     const remote = electron.context().pages().find(p => p.url().startsWith('https://monkeytype.com'));
     assert.ok(remote, 'remote WebContentsView is available');
-    const security = await remote.evaluate(() => ({ node: typeof require, bridge: typeof window.glassTape, color: getComputedStyle(document.body).backgroundColor }));
+    const security = await remote.evaluate(() => ({ node: typeof require, bridge: typeof window.glassType, color: getComputedStyle(document.body).backgroundColor }));
     assert.equal(security.node, 'undefined');
     assert.equal(security.bridge, 'undefined');
     assert.equal(security.color, 'rgba(12, 17, 26, 0)');
@@ -119,11 +119,11 @@ async function main() {
     assert.ok(mainHeight > 200, 'compact layout still allocates height to the test');
     // Page appearance follows SPA navigation, independently of letter mutations.
     await remote.evaluate(() => history.pushState({}, '', '/settings'));
-    await remote.waitForFunction(() => !document.documentElement.hasAttribute('data-glasstape-test') &&
+    await remote.waitForFunction(() => !document.documentElement.hasAttribute('data-glasstype-test') &&
       getComputedStyle(document.getElementById('app')).backgroundColor === 'rgb(50, 52, 55)');
     assert.ok(await remote.locator('header').isVisible(), 'menus remain accessible away from the test');
     await remote.evaluate(() => history.pushState({}, '', '/'));
-    await remote.waitForFunction(() => document.documentElement.hasAttribute('data-glasstape-test') &&
+    await remote.waitForFunction(() => document.documentElement.hasAttribute('data-glasstype-test') &&
       getComputedStyle(document.getElementById('app')).backgroundColor === 'rgba(0, 0, 0, 0)');
     await remote.locator('header').waitFor({ state: 'hidden' });
     await shell.locator('#ink').click();
@@ -148,23 +148,23 @@ async function main() {
     await shell.mouse.up();
     const draggedSize = await electron.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getSize());
     assert.ok(draggedSize[0] < newSize[0] && draggedSize[1] < newSize[1], 'resize grip changes the window dimensions');
-    await shell.evaluate(() => window.glassTape.action('zoomIn'));
+    await shell.evaluate(() => window.glassType.action('zoomIn'));
     const zoom = await electron.evaluate(({ webContents }) => webContents.getAllWebContents().find(w=>w.getURL().startsWith('https://monkeytype.com')).getZoomFactor());
     assert.equal(zoom, 1.1);
     if (initial.shortcuts.passthrough) {
-      await shell.evaluate(() => window.glassTape.action('passthrough'));
-      assert.equal((await shell.evaluate(() => window.glassTape.ready())).clickThrough, true);
-      await shell.evaluate(() => window.glassTape.action('passthrough'));
-      assert.equal((await shell.evaluate(() => window.glassTape.ready())).clickThrough, false);
+      await shell.evaluate(() => window.glassType.action('passthrough'));
+      assert.equal((await shell.evaluate(() => window.glassType.ready())).clickThrough, true);
+      await shell.evaluate(() => window.glassType.action('passthrough'));
+      assert.equal((await shell.evaluate(() => window.glassType.ready())).clickThrough, false);
     }
-    await shell.evaluate(() => window.glassTape.action('compact'));
-    console.log('Compact off:', JSON.stringify(await shell.evaluate(() => window.glassTape.ready())));
+    await shell.evaluate(() => window.glassType.action('compact'));
+    console.log('Compact off:', JSON.stringify(await shell.evaluate(() => window.glassType.ready())));
     await remote.locator('header').waitFor({ state: 'visible', timeout: 5000 });
     assert.equal(await remote.locator('header').isVisible(), true);
     await shell.screenshot({ path: path.join(artifacts, 'shell-tested.png'), omitBackground: true });
     await remote.screenshot({ path: path.join(artifacts, 'transparent-fixture.png'), omitBackground: true });
     simulateOffline = true;
-    await shell.evaluate(() => window.glassTape.action('reload'));
+    await shell.evaluate(() => window.glassType.action('reload'));
     await waitState(shell, s => s.pageState === 'error');
     await shell.locator('#error').waitFor({ state: 'visible' });
     simulateOffline = false;

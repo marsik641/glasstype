@@ -1,6 +1,7 @@
-// No storage is read until the user starts a connection from GlassTape.
+// No storage is read until the user starts a connection from GlassType.
 (async () => {
   if (location.origin !== 'https://monkeytype.com') return;
+  // Stable protocol identifiers also work with versions installed as GlassTape.
   const key = 'glasstape.pending-connection';
   const match = /^#glasstape-connect=(\d{4,5})\.([a-f0-9]{64})$/.exec(location.hash);
   let flow;

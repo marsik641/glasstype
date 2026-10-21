@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 (async () => {
-  const env = { ...process.env, GLASSTAPE_TEST_PROFILE: path.join(root, '.test-profile', 'live-verified') };
+  const env = { ...process.env, GLASSTYPE_TEST_PROFILE: path.join(root, '.test-profile', `live-${Date.now()}`) };
   for (const key of Object.keys(env)) if (/^(ELECTRON_RUN_AS_NODE|NODE_OPTIONS)$/i.test(key)) delete env[key];
   const app = await _electron.launch({ executablePath: path.join(root, 'node_modules/electron/dist/electron.exe'), args: [root], env });
   try {
@@ -21,12 +21,12 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
     assert.ok(shell);
     await shell.waitForSelector('#connection');
     await shell.evaluate(async () => {
-      const s = await window.glassTape.ready();
-      if (s.helpOpen) await window.glassTape.action('dismissHelp');
+      const s = await window.glassType.ready();
+      if (s.helpOpen) await window.glassType.action('dismissHelp');
     });
     let state;
     for (let i = 0; i < 100; i++) {
-      state = await shell.evaluate(() => window.glassTape.ready());
+      state = await shell.evaluate(() => window.glassType.ready());
       if (state.pageState !== 'loading') break;
       await delay(350);
     }
@@ -56,7 +56,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
       body: getComputedStyle(document.body).backgroundColor,
       app: getComputedStyle(document.getElementById('app')).backgroundColor,
       test: getComputedStyle(document.querySelector('.pageTest')).backgroundColor,
-      node: typeof require, bridge: typeof window.glassTape,
+      node: typeof require, bridge: typeof window.glassType,
       words: document.querySelectorAll('#words .word').length
     }));
     assert.equal(styles.body, 'rgba(12, 17, 26, 0)');
@@ -64,8 +64,14 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
     assert.equal(styles.node, 'undefined');
     assert.equal(styles.bridge, 'undefined');
     console.log('Original-site styles:', JSON.stringify(styles));
-    const focus = site.getByText('Click here or press any key to focus', { exact: true });
-    if (await focus.count() === 1 && await focus.isVisible()) await focus.click();
+    await app.evaluate(({ BrowserWindow }) => {
+      const window = BrowserWindow.getAllWindows()[0];
+      window.show(); window.focus();
+      window.contentView.children.find(view => view.webContents?.getURL().startsWith('https://monkeytype.com/'))?.webContents.focus();
+    });
+    await site.locator('#wordsInput').focus();
+    await site.waitForFunction(() => document.activeElement?.id === 'wordsInput' &&
+      !document.getElementById('words').classList.contains('blurred'));
     const firstWord = await site.locator('#words .word').first().innerText();
     await site.keyboard.type(firstWord + ' ', { delay: 70 });
     const correct = await site.locator('#words letter.correct').count();
@@ -79,30 +85,30 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
     await shell.locator('.toolbar').waitFor({ state: 'hidden' });
     const hiddenBounds = await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].contentView.children.find(view=>view.webContents?.getURL().startsWith('https://monkeytype.com')).getBounds());
     assert.equal(hiddenBounds.y, 0);
-    await shell.evaluate(() => window.glassTape.action('toolbar'));
+    await shell.evaluate(() => window.glassType.action('toolbar'));
     await shell.locator('.toolbar').waitFor({ state: 'visible' });
-    await shell.evaluate(() => window.glassTape.action('toolbar'));
+    await shell.evaluate(() => window.glassType.action('toolbar'));
     await shell.locator('.toolbar').waitFor({ state: 'hidden' });
     console.log('Toolbar fully hides, reopens and releases its space.');
     // Do not enter account credentials. Inspect that original login exists.
     await site.screenshot({ path: path.join(root, 'artifacts', 'live-site.png'), omitBackground: true });
-    await shell.evaluate(() => window.glassTape.action('compact'));
+    await shell.evaluate(() => window.glassType.action('compact'));
     await site.locator('header').waitFor({ state: 'hidden' });
     await site.locator('[data-ui-element="testConfig"]').waitFor({ state: 'hidden' });
     await site.locator('body > div.fixed.z-1000').waitFor({ state: 'hidden' });
     assert.ok(await site.locator('#words').isVisible());
     await site.screenshot({ path: path.join(root, 'artifacts', 'live-compact.png'), omitBackground: true });
-    await shell.evaluate(() => window.glassTape.action('compact'));
+    await shell.evaluate(() => window.glassType.action('compact'));
     await site.locator('header').waitFor({ state: 'visible' });
     // The site's top announcement can overlap navigation at narrow widths.
     // Follow the real links with Enter so it cannot intercept the pointer.
     await site.locator('a[href="/settings"]').first().press('Enter');
     await site.waitForURL('https://monkeytype.com/settings');
-    await site.waitForFunction(() => !document.documentElement.hasAttribute('data-glasstape-test') &&
+    await site.waitForFunction(() => !document.documentElement.hasAttribute('data-glasstype-test') &&
       getComputedStyle(document.getElementById('app')).backgroundColor !== 'rgba(0, 0, 0, 0)');
     await site.locator('header a[href="/"]').first().press('Enter');
     await site.waitForURL('https://monkeytype.com/');
-    await site.waitForFunction(() => document.documentElement.hasAttribute('data-glasstape-test') &&
+    await site.waitForFunction(() => document.documentElement.hasAttribute('data-glasstype-test') &&
       getComputedStyle(document.getElementById('app')).backgroundColor === 'rgba(0, 0, 0, 0)');
     await site.waitForSelector('#words .word');
     await fs.writeFile(path.join(root, 'artifacts', 'live-check.json'), JSON.stringify({ date: new Date().toISOString(), originalSiteLoaded: true, styles, compactRoundTrip: true, tabRestart: true, toolbarRoundTrip: true, navigationRoundTrip: true, accountLoginTested: false }, null, 2));

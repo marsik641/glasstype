@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('glassTape', Object.freeze({
+contextBridge.exposeInMainWorld('glassType', Object.freeze({
   action: (name) => ipcRenderer.invoke('glass:action', name),
   ready: () => ipcRenderer.invoke('glass:state'),
   resize: (phase, point) => ipcRenderer.send('glass:resize', phase, point),

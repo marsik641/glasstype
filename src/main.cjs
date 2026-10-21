@@ -8,13 +8,11 @@ const { monkeyStyle } = require('./monkey-style.cjs');
 const { BrowserLogin, isFirebaseSession, importFirebaseSession } = require('./browser-login.cjs');
 const { installTypingShortcuts } = require('./typing-shortcuts.cjs');
 const { openInChrome } = require('./chrome-opener.cjs');
+const { configureProfile } = require('./profile.cjs');
 
-app.setName('GlassTape');
-app.setAppUserModelId('local.glasstape.desktop');
-// An isolated profile for automated checks; normal launches always use AppData.
-if (process.env.GLASSTAPE_TEST_PROFILE && !app.isPackaged) {
-  app.setPath('userData', path.resolve(process.env.GLASSTAPE_TEST_PROFILE));
-}
+app.setName('GlassType');
+app.setAppUserModelId('local.glasstype.desktop');
+configureProfile(app, process.env.GLASSTYPE_TEST_PROFILE);
 const settingsFile = path.join(app.getPath('userData'), 'settings.json');
 let settings;
 try { settings = sanitizeSettings(JSON.parse(fs.readFileSync(settingsFile, 'utf8'))); }
@@ -97,7 +95,7 @@ async function restyle() {
     cssKey = key;
     if (previous) await contents.removeInsertedCSS(previous);
   } catch (error) {
-    if (process.env.GLASSTAPE_TEST_PROFILE) console.error('Style update failed:', error.message);
+    if (process.env.GLASSTYPE_TEST_PROFILE) console.error('Style update failed:', error.message);
     /* A navigation can replace the document while a style is pending. */
   }
 }
@@ -108,7 +106,7 @@ async function updatePageAppearance() {
     // Monkeytype's test lives at /. Update once per navigation, so every tape
     // animation frame need not re-evaluate ancestor :has() selectors.
     await site.webContents.executeJavaScriptInIsolatedWorld(1001, [{
-      code: "document.documentElement.toggleAttribute('data-glasstape-test', location.pathname === '/')"
+      code: "document.documentElement.toggleAttribute('data-glasstype-test', location.pathname === '/')"
     }]);
   } catch { /* Navigation can replace the document while this update is pending. */ }
 }
@@ -143,7 +141,7 @@ function toggleWindow() {
 
 function updateTray() {
   if (!tray || !win || win.isDestroyed()) return;
-  tray.setToolTip(clickThrough ? 'GlassTape — клики проходят насквозь (Ctrl+Shift+X)' : 'GlassTape — Monkeytype поверх окон');
+  tray.setToolTip(clickThrough ? 'GlassType — клики проходят насквозь (Ctrl+Shift+X)' : 'GlassType — Monkeytype поверх окон');
   tray.setContextMenu(Menu.buildFromTemplate([
     { label: 'Показать / вернуть управление', click: showWindow },
     { label: 'Скрыть окно', click: () => win.hide() },
@@ -155,7 +153,7 @@ function updateTray() {
       enabled: !!shortcuts.passthrough, click: togglePassthrough },
     { type: 'separator' },
     { label: 'Как пользоваться', click: () => { showWindow(); action('help'); } },
-    { label: 'Закрыть GlassTape', click: () => app.quit() }
+    { label: 'Закрыть GlassType', click: () => app.quit() }
   ]));
 }
 
@@ -255,7 +253,7 @@ async function action(name) {
       loadSite(); return state();
     case 'browser': external(HOME); return state();
     case 'extensionFolder':
-      shell.openPath(app.isPackaged ? path.join(path.dirname(process.execPath), 'GlassTape Connect') : path.join(__dirname, '../chrome-extension'));
+      shell.openPath(app.isPackaged ? path.join(path.dirname(process.execPath), 'GlassType Connect') : path.join(__dirname, '../chrome-extension'));
       return state();
     case 'google':
       helpOpen = false;
@@ -284,7 +282,7 @@ function trusted(event) {
 
 function createWindow() {
   win = new BrowserWindow({
-    ...clampBounds(settings.bounds, allDisplays()), title: 'GlassTape',
+    ...clampBounds(settings.bounds, allDisplays()), title: 'GlassType',
     icon: path.join(__dirname, '../assets/icon.png'), frame: false,
     transparent: true, backgroundColor: '#00000000', hasShadow: false,
     resizable: false, maximizable: false, fullscreenable: false,
@@ -418,7 +416,7 @@ if (!app.requestSingleInstanceLock()) app.quit();
 else {
   app.on('second-instance', () => { if (win) showWindow(); });
   app.whenReady().then(createWindow).catch(error => {
-    dialog.showErrorBox('GlassTape', `Не удалось открыть приложение.\n${error.message}`);
+    dialog.showErrorBox('GlassType', `Не удалось открыть приложение.\n${error.message}`);
     app.quit();
   });
 }

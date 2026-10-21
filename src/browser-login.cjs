@@ -109,9 +109,10 @@ class BrowserLogin {
       flow.timer = setTimeout(() => {
         if (this.flow !== flow) return;
         this.cancel();
-        this.onState('error', 'Нет ответа от расширения. Добавьте GlassTape Connect в свой Chrome и повторите вход.');
+        this.onState('error', 'Нет ответа от расширения. Добавьте GlassType Connect в свой Chrome и повторите вход.');
       }, 300000);
-      this.onState('waiting', 'Monkeytype открыт в обычном браузере с вашим профилем. Если вы уже вошли, расширение GlassTape Connect подключит аккаунт автоматически.');
+      this.onState('waiting', 'Monkeytype открыт в обычном браузере с вашим профилем. Если вы уже вошли, расширение GlassType Connect подключит аккаунт автоматически.');
+      // Retain the original wire prefix for already installed Chrome extensions.
       await this.openBrowser('https://monkeytype.com/login#glasstape-connect=' + flow.port + '.' + flow.nonce);
     } catch {
       if (this.flow === flow) {
@@ -148,7 +149,7 @@ class BrowserLogin {
       if (!isFirebaseSession(data)) { reply(response, 400, { ok: false }); return; }
       if (this.flow !== flow) { reply(response, 410, { ok: false }); return; }
       flow.processing = true;
-      this.onState('importing', 'Подключаем ваш аккаунт к GlassTape…');
+      this.onState('importing', 'Подключаем ваш аккаунт к GlassType…');
       await this.importSession(data);
       if (this.flow !== flow) { reply(response, 410, { ok: false }); return; }
       reply(response, 200, { ok: true });
@@ -156,13 +157,13 @@ class BrowserLogin {
       clearTimeout(flow.timer);
       flow.server.close();
       flow.server.closeIdleConnections();
-      this.onState('success', 'Аккаунт подключён. Вход сохранён в GlassTape.');
+      this.onState('success', 'Аккаунт подключён. Вход сохранён в GlassType.');
     } catch {
       flow.processing = false;
       if (!response.headersSent) reply(response, 500, { ok: false });
       if (this.flow === flow) {
         await this.cancel();
-        this.onState('error', 'Не удалось сохранить вход в GlassTape. Повторите подключение.');
+        this.onState('error', 'Не удалось сохранить вход в GlassType. Повторите подключение.');
       }
     }
   }

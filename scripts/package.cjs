@@ -27,13 +27,13 @@ const { exportFirebaseSession } = require('../src/browser-login.cjs');
     await fs.writeFile(path.join(stage, 'package.json'), JSON.stringify(manifest, null, 2));
     await fs.copyFile(path.join(root, 'LICENSE'), path.join(stage, 'LICENSE'));
     const paths = await packager({
-      dir: stage, name: 'GlassTape', executableName: 'GlassTape', prune: false,
+      dir: stage, name: 'GlassType', executableName: 'GlassType', prune: false,
       platform: 'win32', arch: 'x64', electronVersion: require('electron/package.json').version,
       download: { cacheRoot: path.join(root, '.electron-cache'), checksums: require('electron/checksums.json') },
       out: output, overwrite: true, asar: true,
       icon: path.join(root, 'assets/icon.ico'),
-      appCopyright: 'GlassTape contributors',
-      win32metadata: { CompanyName: 'GlassTape', FileDescription: 'GlassTape — transparent Monkeytype client', ProductName: 'GlassTape' },
+      appCopyright: 'GlassType contributors',
+      win32metadata: { CompanyName: 'GlassType', FileDescription: 'GlassType — transparent Monkeytype client', ProductName: 'GlassType' },
       // Use only the application files; never include local profiles or checks.
       ignore: [/^\/(?:research|test|scripts|artifacts|\.test-profile|dist)(?:\/|$)/,
         /^\/\./, /^\/(?:README\.md|pnpm-lock\.yaml|pnpm-workspace\.yaml|.*\.cmd)$/]
@@ -43,9 +43,9 @@ const { exportFirebaseSession } = require('../src/browser-login.cjs');
       // User profiles are stored elsewhere and are not affected.
       if (process.platform === 'win32') execFileSync('icacls', [folder, '/grant', '*S-1-15-2-1:(OI)(CI)(RX)'], { windowsHide: true, stdio: 'ignore' });
       await fs.copyFile(path.join(root, 'README.md'), path.join(folder, 'КАК ПОЛЬЗОВАТЬСЯ.txt'));
-      await fs.copyFile(path.join(root, 'LICENSE'), path.join(folder, 'LICENSE-GlassTape.txt'));
-      await fs.cp(path.join(root, 'chrome-extension'), path.join(folder, 'GlassTape Connect'), { recursive: true });
-      console.log(path.join(folder, 'GlassTape.exe'));
+      await fs.copyFile(path.join(root, 'LICENSE'), path.join(folder, 'LICENSE-GlassType.txt'));
+      await fs.cp(path.join(root, 'chrome-extension'), path.join(folder, 'GlassType Connect'), { recursive: true });
+      console.log(path.join(folder, 'GlassType.exe'));
     }
   } finally {
     // This is the absolute temporary directory just created inside artifacts/.

@@ -1,14 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "GlassTape Connect",
-  "version": "0.2.0",
-  "description": "Подключает ваш вход на Monkeytype к локальному GlassTape по нажатию G в клиенте.",
-  "host_permissions": ["http://127.0.0.1/*"],
-  "background": { "service_worker": "background.js" },
-  "content_scripts": [{
-    "matches": ["https://monkeytype.com/*"],
-    "js": ["firebase-session.js", "content.js"],
-    "run_at": "document_idle",
-    "all_frames": false
-  }]
+  "name": "GlassType Connect",
+  "version": "0.2.2",
+  "description": "Подключает ваш вход на Monkeytype к локальному GlassType по нажатию G в клиенте.",
+  "host_permissions": [
+    "http://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://monkeytype.com/*"
+      ],
+      "js": [
+        "firebase-session.js",
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
 }

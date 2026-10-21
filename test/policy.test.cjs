@@ -57,7 +57,7 @@ test('corrupt saved preferences fall back to visible, usable settings', () => {
 test('transparent overlay preserves native test modes and opaque dialogs', () => {
   const css = monkeyStyle(sanitizeSettings({ ink: 'dark', compact: true, backdrop: 0 }));
   assert.match(css, /rgba\(255, 255, 255, 0\)/);
-  assert.match(css, /html\[data-glasstape-test\]/);
+  assert.match(css, /html\[data-glasstype-test\]/);
   assert.doesNotMatch(css, /letter\.correct\s*\{/);
   assert.doesNotMatch(css, /--bg-color:\s*transparent/);
   assert.doesNotMatch(css, /#words\.blurred\s*\{/);

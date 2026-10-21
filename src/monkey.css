@@ -13,7 +13,7 @@ body { background: var(--gt-backdrop) !important; }
   display: none !important;
 }
 #app { padding: 12px 0 !important; min-height: 100vh !important; }
-html:not([data-glasstape-test]) #app { background-color: var(--bg-color) !important; }
+html:not([data-glasstype-test]) #app { background-color: var(--bg-color) !important; }
 #wordsWrapper, #words, #typingTest, #testModesNotice {
   background: transparent !important;
 }

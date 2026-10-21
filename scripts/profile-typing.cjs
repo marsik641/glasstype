@@ -16,7 +16,7 @@ async function main() {
     compact: true, hasLaunched: true, ink: 'light', toolbarVisible: false,
     bounds: { x: 650, y: 300, width: 1040, height: 580 }
   }));
-  const env = { ...process.env, GLASSTAPE_TEST_PROFILE: profileDir };
+  const env = { ...process.env, GLASSTYPE_TEST_PROFILE: profileDir };
   for (const key of Object.keys(env)) if (/^(ELECTRON_RUN_AS_NODE|NODE_OPTIONS)$/i.test(key)) delete env[key];
   let target = root;
   if (override) {
@@ -34,7 +34,7 @@ async function main() {
     }
     await shell.waitForSelector('#connection');
     for (let i = 0; i < 120; i++) {
-      const state = await shell.evaluate(() => window.glassTape.ready());
+      const state = await shell.evaluate(() => window.glassType.ready());
       if (state.pageState === 'ready') break;
       if (state.pageState === 'error') throw new Error(state.lastError);
       await delay(250);

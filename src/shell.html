@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self';">
-  <title>GlassTape</title>
+  <title>GlassType</title>
   <link rel="stylesheet" href="shell.css">
 </head>
 <body>
-  <header class="toolbar" aria-label="Управление GlassTape">
+  <header class="toolbar" aria-label="Управление GlassType">
     <div class="brand drag" title="Перетащите окно за название">
       <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="5"/><path d="M7 10h2m3 0h2m3 0h.1M7 14h10"/></svg>
-      <strong>GlassTape</strong>
+      <strong>GlassType</strong>
       <span id="connection" class="dot" title="Загрузка сайта"></span>
     </div>
     <div class="drag spacer" aria-hidden="true"></div>
@@ -31,7 +31,7 @@
     <button id="helpButton" data-action="help" class="icon" title="Как пользоваться" aria-label="Как пользоваться"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M8 7a2 2 0 1 1 3 2c-1 1-1 1-1 2m0 3h.01"/></svg></button>
     <button data-action="toolbar" class="icon" title="Скрыть панель · Ctrl+Shift+H возвращает её" aria-label="Скрыть панель управления"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 12 5-5 5 5"/></svg></button>
     <button data-action="hide" class="icon" title="Скрыть · Ctrl+Shift+Space возвращает окно" aria-label="Скрыть окно"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10"/></svg></button>
-    <button data-action="close" class="icon close" title="Закрыть GlassTape" aria-label="Закрыть GlassTape"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 6 8 8m0-8-8 8"/></svg></button>
+    <button data-action="close" class="icon close" title="Закрыть GlassType" aria-label="Закрыть GlassType"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 6 8 8m0-8-8 8"/></svg></button>
   </header>
 
   <main id="welcome" class="panel" hidden>
@@ -48,7 +48,7 @@
       <span>Клики насквозь<kbd>Ctrl Shift X</kbd></span>
       <span>Панель управления<kbd>Ctrl Shift H</kbd></span>
     </div>
-    <p id="shortcutWarning" class="warning" hidden>Некоторые сочетания уже заняты. Показать окно и вернуть управление можно через значок GlassTape рядом с часами.</p>
+    <p id="shortcutWarning" class="warning" hidden>Некоторые сочетания уже заняты. Показать окно и вернуть управление можно через значок GlassType рядом с часами.</p>
     <div class="panel-footer"><span>Тяните за название · размер — за правый нижний угол</span><button class="primary" data-action="dismissHelp">Начать печатать <span aria-hidden="true">↗</span></button></div>
   </main>
 
@@ -61,7 +61,7 @@
     <div class="google-symbol" aria-hidden="true">G</div>
     <h2 id="loginTitle">Подключение вашего браузера</h2>
     <p id="loginDetail"></p>
-    <p class="login-note">Для переноса входа один раз добавьте GlassTape Connect в свой Chrome:<br>chrome://extensions → Режим разработчика → Загрузить распакованное расширение.<br>Выберите папку, которую открывает кнопка ниже.</p>
+    <p class="login-note">Для переноса входа один раз добавьте GlassType Connect в свой Chrome:<br>chrome://extensions → Режим разработчика → Загрузить распакованное расширение.<br>Выберите папку, которую открывает кнопка ниже.</p>
     <button data-action="extensionFolder" class="secondary">Папка расширения</button>
     <button id="retryLogin" data-action="google" class="primary" hidden>Повторить вход</button>
     <button data-action="cancelLogin" class="secondary">Вернуться к тесту</button>
@@ -69,7 +69,7 @@
 
   <section id="error" class="message error-message" hidden aria-live="polite">
     <span class="error-symbol" aria-hidden="true">↗</span><h2>Сайт пока недоступен</h2>
-    <p>Проверьте подключение к интернету.<br>Если Monkeytype открывается только с VPN в браузере,<br>нужен доступ к нему и для GlassTape.</p>
+    <p>Проверьте подключение к интернету.<br>Если Monkeytype открывается только с VPN в браузере,<br>нужен доступ к нему и для GlassType.</p>
     <code id="errorDetail"></code>
     <div><button data-action="reload" class="primary">Повторить</button><button data-action="browser" class="secondary">Открыть в браузере</button></div>
   </section>

@@ -1,19 +1,19 @@
 {
-  "name": "glasstape",
-  "productName": "GlassTape",
-  "version": "0.2.1",
+  "name": "glasstype",
+  "productName": "GlassType",
+  "version": "0.2.2",
   "description": "Transparent desktop window for the original Monkeytype website",
   "private": true,
   "main": "src/main.cjs",
-  "author": "GlassTape",
+  "author": "GlassType",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/marsik641/glasstape.git"
+    "url": "https://github.com/marsik641/glasstype.git"
   },
-  "homepage": "https://github.com/marsik641/glasstape#readme",
+  "homepage": "https://github.com/marsik641/glasstype#readme",
   "bugs": {
-    "url": "https://github.com/marsik641/glasstape/issues"
+    "url": "https://github.com/marsik641/glasstype/issues"
   },
   "engines": {
     "node": ">=22.12.0"

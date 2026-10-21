@@ -1,2 +1,2 @@
 @echo off
-start "" "%~dp0dist\GlassTape-win32-x64\GlassTape.exe"
+start "" "%~dp0dist\GlassType-win32-x64\GlassType.exe"

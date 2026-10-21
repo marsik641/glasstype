@@ -1,4 +1,4 @@
-const api = window.glassTape;
+const api = window.glassType;
 let current;
 function render(state) {
   if (!state) return;
