@@ -1,0 +1,25 @@
+/* Cosmetic changes only: the live site's scripts, test, auth and storage stay intact. */
+html, body {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+body { background: var(--gt-backdrop) !important; }
+#app, #contentWrapper, #middle, main, .pageTest {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+#background, #customBackground, .customBackground {
+  display: none !important;
+}
+#app { padding: 12px 0 !important; min-height: 100vh !important; }
+html:not([data-glasstape-test]) #app { background-color: var(--bg-color) !important; }
+#wordsWrapper, #words, #typingTest, #testModesNotice {
+  background: transparent !important;
+}
+#testConfig, #testConfig .row, #testConfig .group,
+[data-ui-element="testConfig"], [data-ui-element="testConfig"] .card {
+  background-color: transparent !important;
+}
+/* Keep original highlight/colorful/blind modes and all modal surfaces intact. */
+/* The site's own focus behavior and its blur warning are intentionally preserved. */

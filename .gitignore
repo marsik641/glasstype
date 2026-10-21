@@ -1,0 +1,88 @@
+# Dependencies and downloaded runtimes
+node_modules/
+.pnpm-store/
+.electron-cache/
+.browser-cache/
+.npm/
+.yarn/
+
+# Builds, releases, diagnostics and downloaded reference sources
+/dist/
+/build/
+/releases/
+/artifacts/
+/research/
+/coverage/
+/playwright-report/
+/test-results/
+*.exe
+*.dll
+*.msi
+*.msix
+*.asar
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.log
+*.har
+*.dmp
+*.heapsnapshot
+*.cpuprofile
+
+# Browser profiles may contain accounts, cookies and browsing history
+/.test-profile/
+/profile/
+/profiles/
+/user-data/
+/userData/
+/settings.json
+Cookies
+Cookies-journal
+Login Data*
+Web Data*
+Local State
+Preferences
+History
+History-journal
+IndexedDB/
+Local Storage/
+Session Storage/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+
+# Local secrets and signing material
+.env
+.env.*
+!.env.example
+!.env.*.example
+.secrets/
+secrets.*
+credentials*.json
+service-account*.json
+serviceAccount*.json
+*firebase-adminsdk*.json
+*.secret
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+
+# Personal editor and operating-system files
+.vscode/
+.idea/
+.vs/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~

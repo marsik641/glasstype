@@ -1,0 +1,30 @@
+{
+  "name": "glasstape",
+  "productName": "GlassTape",
+  "version": "0.2.1",
+  "description": "Transparent desktop window for the original Monkeytype website",
+  "private": true,
+  "main": "src/main.cjs",
+  "author": "GlassTape",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marsik641/glasstape.git"
+  },
+  "homepage": "https://github.com/marsik641/glasstape#readme",
+  "bugs": {
+    "url": "https://github.com/marsik641/glasstape/issues"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.cjs",
+    "build": "node scripts/package.cjs"
+  },
+  "devDependencies": {
+    "@electron/packager": "20.3.0",
+    "electron": "45.0.0"
+  }
+}
